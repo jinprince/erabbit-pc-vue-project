@@ -3,7 +3,7 @@
     <HomePanel title="新鲜好物" sub-title="新鲜出炉 品质靠谱">
       <template #right><XtxMore path="/" /></template>
       <!-- 面板内容 -->
-      <div>
+      <div ref="target" style="position:relative;height:406px;">
         <Transition>
           <ul class="goods-list" v-if="goods.length">
             <li v-for="item in goods" :key="item.id">
@@ -21,19 +21,31 @@
   </div>
 </template>
 <script>
-import { ref } from "vue";
+// import { ref } from "vue";
 import HomePanel from "./home-panel";
 import { findNew } from "@/api/home";
 import HomeSkeleton from './home-skeleton.vue';
+import {useLazyData} from '@/hooks';
+// import { useIntersectionObserver } from '@vueuse/core'
 export default {
   name: "HomeNew",
   components: { HomePanel,HomeSkeleton },
   setup() {
-    const goods = ref([]);
-    findNew().then((data) => {
-      goods.value = data.result;
-    });
-    return { goods };
+    // const goods = ref([]);
+    // const box=ref(null)
+    // const {stop} =useIntersectionObserver(
+    //   box,
+    //   ([{isIntersecting}])=>{
+    //     if(isIntersecting){
+    //       stop()
+    //         findNew().then((data) => {
+    //         goods.value = data.result;
+    // });
+    //     }
+    //   }
+    // )
+   const {target,result}=useLazyData(findNew)
+    return { goods:result,target};
   },
 };
 </script>
